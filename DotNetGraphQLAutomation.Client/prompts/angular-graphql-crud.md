@@ -1,5 +1,41 @@
 # Angular CRUD with GraphQL Prompts
 
+## 0. GraphQL Connection Structure
+
+When designing GraphQL queries for paginated lists, use the following structure:
+
+- `edges: [BrandsEdge!]` — A list of edges, each containing a node and cursor.
+- `nodes: [Brand!]` — A flattened list of the nodes (entities).
+- `pageInfo: PageInfo!` — Information to aid in pagination (e.g., hasNextPage, hasPreviousPage, endCursor).
+
+Example:
+```graphql
+query {
+  brands(first: 5) {
+    edges {
+      node {
+        brandId
+        brandName
+        status
+        remark
+      }
+      cursor
+    }
+    nodes {
+      brandId
+      brandName
+      status
+      remark
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+    }
+  }
+}
+```
+
 ## 1. Generate Angular Service for GraphQL
 Generate an Angular service named `{entity}Service` that uses Apollo Angular to perform CRUD operations for the `{entity}` entity. The service should include methods for:
 - getAll{EntityPlural}()

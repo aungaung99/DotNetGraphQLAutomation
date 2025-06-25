@@ -4,6 +4,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
+
+import { ApolloClientOptions, InMemoryCache } from '@apollo/client/core';
+import { provideApollo } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { inject } from '@angular/core';
+
+const uri = 'https://localhost:7178/graphql'; // Replace with your GraphQL endpoint
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +22,15 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura
       }
-    })
+    }),
+    provideHttpClient(),
+    // ✅ Apollo Client configuration
+    provideApollo((): ApolloClientOptions<any> => {
+      const httpLink = inject(HttpLink);
+      return {
+        cache: new InMemoryCache(),
+        link: httpLink.create({ uri }),
+      };
+    }),
   ]
 };

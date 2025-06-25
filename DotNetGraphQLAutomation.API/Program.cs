@@ -11,6 +11,16 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<DotNetAutomationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add CORS policy to allow Angular app on localhost:4200
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularLocalhost",
+        policy => policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
+});
+
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
@@ -34,6 +44,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS policy
+app.UseCors("AllowAngularLocalhost");
 
 app.UseAuthorization();
 

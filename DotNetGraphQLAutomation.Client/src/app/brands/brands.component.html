@@ -1,0 +1,57 @@
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold">Brands</h2>
+    <button pButton type="button" label="Add Brand" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+  </div>
+  <p-table [value]="brands" [loading]="loading" class="w-full">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Brand Name</th>
+        <th>Status</th>
+        <th>Remark</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-brand>
+      <tr>
+        <td>{{ brand.brandName }}</td>
+        <td>
+          <span class="px-2 py-1 rounded text-xs" [ngClass]="brand.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+            {{ brand.status ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td>{{ brand.remark }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text mr-2" (click)="editBrand(brand)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" (click)="confirmDelete(brand)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="{{ isEdit ? 'Edit Brand' : 'Add Brand' }}" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '400px'}">
+    <form (ngSubmit)="saveBrand()" class="flex flex-col gap-4">
+      <div>
+        <label class="block mb-1 font-medium">Brand Name</label>
+        <input pInputText [(ngModel)]="selectedBrand.brandName" name="brandName" required class="w-full" />
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Status</label>
+        <select [(ngModel)]="selectedBrand.status" name="status" class="w-full p-2 rounded border">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Remark</label>
+        <input pInputText [(ngModel)]="selectedBrand.remark" name="remark" class="w-full" />
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button pButton type="button" label="Cancel" class="p-button-text" (click)="displayDialog=false"></button>
+        <button pButton type="submit" label="Save" class="p-button-success"></button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <p-confirmDialog></p-confirmDialog>
+</div>
