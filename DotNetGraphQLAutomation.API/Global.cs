@@ -4,3 +4,7 @@ global using Microsoft.EntityFrameworkCore.SqlServer;
 global using HotChocolate.AspNetCore;
 global using HotChocolate.Data;
 global using DotNetCrudAutomation.Data;
+global using HotChocolate;
+global using HotChocolate.Types;
+global using HotChocolate.Types.Relay;
+global using HotChocolate.Execution;

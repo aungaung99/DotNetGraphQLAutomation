@@ -1,56 +1,57 @@
-# Brand GraphQL Implementation Prompt
+# Color GraphQL Implementation Prompt
 
 ## Folder Structure
 GraphQL/
-└── Brands/
-    ├── BrandQuery.cs
-    ├── BrandMutation.cs
-    ├── BrandType.cs
-    ├── BrandInput.cs
-    └── BrandPayload.cs
+└── Colors/
+    ├── ColorQuery.cs
+    ├── ColorMutation.cs
+    ├── ColorType.cs
+    ├── ColorInput.cs
+    └── ColorPayload.cs
+
 ## Requirements
 
 ### 1. CRUD Operations
 
 - **Queries**:  
-  - List all brands (with filtering and sorting support).
-  - Get a single brand by ID.
+  - List all colors (with filtering and sorting support).
+  - Get a single color by ID.
   - add these attributes [UsePaging] [UseFiltering] [UseSorting]
 
 - **Mutations**:  
-  - Create a brand (POST).
-  - Update a brand (PUT).
-  - Delete a brand (DELETE).
+  - Create a color (POST).
+  - Update a color (PUT).
+  - Delete a color (DELETE).
 
 ### 2. Return Type for Mutations
 
-- All mutation actions (POST, PUT, DELETE) must return a `DefaultResponseMessageModel` as the payload, wrapped in a `BrandPayload` type.
+- All mutation actions (POST, PUT, DELETE) must return a `DefaultResponseMessageModel` as the payload, wrapped in a `ColorPayload` type.
 
 ### 3. Filtering and Sorting
 
-- The list brands query must support:
-  - **Filtering**: By brand name (partial match).
-  - **Sorting**: By brand name (asc/desc).
+- The list colors query must support:
+  - **Filtering**: By color name (partial match).
+  - **Sorting**: By color name (asc/desc).
 
 ### 4. File Responsibilities
 
-- **BrandQuery.cs**:  
-  - Defines GraphQL queries for brands, including filtering and sorting.
+- **ColorQuery.cs**:  
+  - Defines GraphQL queries for colors, including filtering and sorting.
   - Add this attribute [ExtendObjectType("Query")]
 
-- **BrandMutation.cs**:  
-  - Defines GraphQL mutations for create, update, and delete actions, returning `BrandPayload`.
+- **ColorMutation.cs**:  
+  - Defines GraphQL mutations for create, update, and delete actions, returning `ColorPayload`.
   - Mutations should accept `DotNetAutomationDbContext dbContext` as a service parameter (no `[UseDbContext]` or `[ScopedService]` attributes).
   - Use [Service] for mutation methods to inject the database context.
   - Add this attribute [ExtendObjectType("Mutation")]
 
-- **BrandType.cs**:  
-  - GraphQL type definition for the Brand entity.
+- **ColorType.cs**:  
+  - GraphQL type definition for the Color entity.
 
-- **BrandInput.cs**:  
+- **ColorInput.cs**:  
   - Input types for create and update mutations.
 
-- **BrandPayload.cs**:  
+- **ColorPayload.cs**:  
   - Payload type for mutation responses, wrapping `DefaultResponseMessageModel`.
 
 ### 5. Add in Program.cs
@@ -62,9 +63,9 @@ builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
     .AddMutationType(d => d.Name("Mutation"))
-    .AddType<BrandType>()
-    .AddTypeExtension<BrandQuery>()
-    .AddTypeExtension<BrandMutation>()
+    .AddType<ColorType>()
+    .AddTypeExtension<ColorQuery>()
+    .AddTypeExtension<ColorMutation>()
     .AddFiltering() // Enable filtering if not already included
     .AddSorting()
     .AddProjections();
@@ -72,20 +73,26 @@ builder.Services
 
 ## Example Query & Mutation
 
-### Query (with filtering and sorting)query {
-  brands(filter: "Acme", sort: "name_desc") {
+### Query (with filtering and sorting)
+```graphql
+query {
+  colors(filter: "Red", sort: "name_desc") {
     id
     name
   }
 }
-### Mutation (Create)mutation {
-  createBrand(input: { name: "NewBrand" }) {
+```
+### Mutation (Create)
+```graphql
+mutation {
+  createColor(input: { name: "NewColor" }) {
     response {
       success
       message
     }
   }
 }
+```
 ---
 
 ## Notes
